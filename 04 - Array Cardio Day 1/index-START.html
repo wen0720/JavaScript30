@@ -33,29 +33,87 @@
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    console.table(
+      inventors.filter(el => {
+        return el.year > 1500 && el.year < 1600
+      })
+    )
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors' first and last names
+    console.table(
+      inventors.map(el => {        
+          return el.first + ' ' + el.last        
+      })
+    )
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    console.table(
+      inventors.sort((a, b) => {
+        return a.year - b.year
+      })
+    )
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live?
+      console.log(
+        inventors.reduce((acum, currentValue) => {
+          let num = currentValue.passed - currentValue.year          
+          return acum += num          
+        }, 0)
+      )
 
     // 5. Sort the inventors by years lived
+      console.table(
+        inventors.sort((fst, secnd) => {
+          let fstYear = fst.passed - fst.year
+          let secndYear = secnd.passed - secnd.year
+          return secndYear > fstYear ? 1 : -1
+        })
+      )
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-
+        
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+      console.log(
+        people.map(el => { return { first:el.split(' ')[0], last:el.split(' ')[1]} })
+              .sort((a, b) => {
+                if (a.last < b.last) {
+                  return -1;
+                }
+                if (a.last > b.last) {
+                  return 1;
+                }
+                // names must be equal
+                return 0;
+              })
+              .map(el => {return el.first + ' ' + el.last})
+      )
+
+    // const alpha = people.sort((lastOne, nextOne) => {
+    //   const [aFirst, aLast] = lastOne.split(', ');
+    //   const [bFirst, bLast] = nextOne.split(', ');
+    //   return aLast > bLast ? 1 : -1;
+    // });
+    // console.log(alpha);
+    
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
-
+    console.log(
+        data.reduce((obj, current) => {
+          if(!obj[current]){
+            obj[current] = 0          
+          }
+          obj[current] = obj[current] + 1
+          return obj
+        }, {})
+      )
   </script>
 </body>
 </html>

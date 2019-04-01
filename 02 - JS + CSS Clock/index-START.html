@@ -61,12 +61,41 @@
       background:black;
       position: absolute;
       top:50%;
+      transform-origin: 100% 50%;
+      transition: all 1s;
     }
 
   </style>
-
+      
   <script>
+    function now () {
+      let hour, min, second      
 
+      setInterval(() => {
+        hour = new Date().getHours()
+        min = new Date().getMinutes()
+        second = new Date().getSeconds()    
+        console.log(hour, min, second)
+        hourDeg = 360 / 12 * hour 
+        minDeg = 360 / 60 * min
+        secondDeg = 360 / 60 * second
+        
+        if(hourDeg || minDeg || secondDeg){
+          document.querySelectorAll('.hand').forEach(el => {
+            el.style.transition = 'all 0s'   // 在要繞一圈的時候，把 css trisition 拿掉
+          })   
+        }else {
+          document.querySelectorAll('.hand').forEach(el => {
+            el.style.transition = 'all 1s'
+          })  
+        } 
+        document.querySelector('.hour-hand').style.transform = `rotate(${hourDeg + 90}deg)`
+        document.querySelector('.min-hand').style.transform = `rotate(${minDeg + 90}deg)`
+        document.querySelector('.second-hand').style.transform = `rotate(${secondDeg + 90}deg)`
+      },1000)      
+    }        
+
+    now();
 
   </script>
 </body>

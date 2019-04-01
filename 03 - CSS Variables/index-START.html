@@ -9,19 +9,23 @@
 
   <div class="controls">
     <label for="spacing">Spacing:</label>
-    <input type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+    <input type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">   <!-- 原來有這種 input range 的 input -->
 
     <label for="blur">Blur:</label>
     <input type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
 
     <label for="base">Base Color</label>
-    <input type="color" name="base" value="#ffc600">
+    <input type="color" name="base" value="#ffc600">    <!-- 原來有這種 color 選擇的 input -->
   </div>
 
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
-
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -45,9 +49,40 @@
     input {
       width:100px;
     }
+
+    img{      
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
   </style>
 
   <script>
+    // document.querySelector('input[name="spacing"]').addEventListener('input', (e) => {
+    //     // 要用 input 才能在拖拉時，也觸發事件          
+    //     console.log('[目前拉霸的值]',e.target.value)  
+    //     document.querySelector('img').style.padding = e.target.value - 10  + 'px'          
+    // })      
+
+    // document.querySelector('input[name="blur"]').addEventListener('input', (e) => {
+    //     // 要用 input 才能在拖拉時，也觸發事件          
+    //     console.log('[目前拉霸的值]',e.target.value)          
+    // }) 
+
+
+    // 透過 JS 改變 css 變數     
+    // 這次的做法不是直接寫 style 上去，而是先將 style 指定給 css 變數，再透過 JS 去改變 css 變數的內容
+    // document.documentElement 就是 <html> 元素
+
+    function handleUpate (){
+      console.log(this.name, this.type, this.value)
+      let suffix = this.dataset.sizing || ''
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix)
+    }
+    
+    document.querySelectorAll('input[type="range"]').forEach(input => input.addEventListener('input', handleUpate))
+    document.querySelector('input[type="color"]').addEventListener('input', handleUpate)
+    
   </script>
 
 </body>

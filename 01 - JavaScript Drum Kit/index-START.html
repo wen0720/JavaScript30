@@ -59,6 +59,25 @@
 
   <script>
 
+    let keys = document.querySelectorAll('.key')
+    let audios = document.querySelectorAll('audio') 
+    
+    window.addEventListener('keydown', function (e) {
+      if (!document.querySelector(`audio[data-key="${e.keyCode}"]`)) {
+        return
+      }
+      document.querySelector(`audio[data-key="${e.keyCode}"]`).currentTime = 0  // 為了讓每次按的時候，都可以直接從頭開始播
+      document.querySelector(`audio[data-key="${e.keyCode}"]`).play()
+      document.querySelector(`div[data-key="${e.keyCode}"]`).classList.add('playing')            
+    })
+  
+    // transitionend 事件偵測 css 在 transition 結束之後，會觸發
+    keys.forEach(el => {
+      el.addEventListener('transitionend', function () {
+        this.classList.remove('playing')
+      })
+    })    
+  
   </script>
 
 </body>
