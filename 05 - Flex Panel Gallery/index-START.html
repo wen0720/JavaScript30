@@ -24,6 +24,9 @@
     .panels {
       min-height:100vh;
       overflow: hidden;
+
+      display:flex;
+      justify-content: center;
     }
 
     .panel {
@@ -41,6 +44,11 @@
       font-size: 20px;
       background-size:cover;
       background-position:center;
+
+      flex-grow: 1;      
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
 
@@ -62,12 +70,26 @@
       text-shadow:0 0 4px rgba(0, 0, 0, 0.72), 0 0 14px rgba(0, 0, 0, 0.45);
       font-size: 2em;
     }
+
+    .panel p:nth-child(1) {
+      transform: translateY(-100%)
+    }
+
     .panel p:nth-child(2) {
       font-size: 4em;
     }
 
+    .panel p:nth-child(3) {
+      transform: translateY(100%)
+    }    
+
+    .panel.open-active p:nth-child(1), .panel.open-active p:nth-child(3){
+      transform: translateY(0)
+    }
+
     .panel.open {
       font-size:40px;
+      flex: 6;
     }
 
     .cta {
@@ -107,7 +129,32 @@
   </div>
 
   <script>
-    
+    const panels = document.querySelector('.panels');    
+    panels.addEventListener('click', function(e) {         
+      let isOpen
+      let DIV
+      if (e.target.nodeName === 'P') {        
+        DIV = e.target.parentNode
+        isOpen = Array.prototype.slice.call(DIV.classList).includes('open')
+        
+      } else if (e.target.nodeName === "DIV") {
+        DIV = e.target
+        isOpen = Array.prototype.slice.call(e.target.classList).includes('open')              
+      }
+
+      if (!isOpen) {
+        DIV.classList.add('open')
+        setTimeout(() => {
+          DIV.classList.add('open-active')
+        }, 500)
+      }else {
+        DIV.classList.remove('open')
+        setTimeout(() => {
+          DIV.classList.remove('open-active')          
+        }, 500)
+                
+      } 
+    })
   </script>
 
 
