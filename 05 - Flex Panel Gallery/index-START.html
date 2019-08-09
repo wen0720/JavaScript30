@@ -133,6 +133,7 @@
     panels.addEventListener('click', function(e) {         
       let isOpen
       let DIV
+      // 先判斷 isOpen 和 DIV
       if (e.target.nodeName === 'P') {        
         DIV = e.target.parentNode
         isOpen = Array.prototype.slice.call(DIV.classList).includes('open')
@@ -142,18 +143,23 @@
         isOpen = Array.prototype.slice.call(e.target.classList).includes('open')              
       }
 
-      if (!isOpen) {
-        DIV.classList.add('open')
-        setTimeout(() => {
-          DIV.classList.add('open-active')
-        }, 500)
-      }else {
-        DIV.classList.remove('open')
-        setTimeout(() => {
-          DIV.classList.remove('open-active')          
-        }, 500)
-                
-      } 
+      // 針對isOpen 是 true 或 false 做開/關的效果
+      // if (!isOpen) {
+      //   DIV.classList.add('open')
+      //   setTimeout(() => {
+      //     DIV.classList.add('open-active')
+      //   }, 500)
+      // }else {
+      //   DIV.classList.remove('open')
+      //   setTimeout(() => {
+      //     DIV.classList.remove('open-active')          
+      //   }, 500)                
+      // } 
+
+      DIV.classList.toggle('open')
+      setTimeout(() => {
+        DIV.classList.toggle('open-active')
+      }, 500)
     })
   </script>
 
