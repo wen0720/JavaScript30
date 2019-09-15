@@ -5,13 +5,120 @@
   <title>HTML5 Canvas</title>
 </head>
 <body>
-<canvas id="draw" width="800" height="800"></canvas>
+<canvas id="draw"></canvas>
+
 <script>
+  const canvas = document.getElementById('draw')  
+  let ctx
+  let isDown = false 
+  let win_w = window.innerWidth
+  let win_h = window.innerHeight
+  let radius = 3 // 起始半徑大小
+  let radiusPlus = 0.5  // 半徑變化 range
+  let bigest = 55 // 最大半徑
+  let colorChange = 4  // 顏色變化 range
+
+  let defaultColor = [255, 0, 0] // 預設起始顏色
+  let colorIdx = 0 // 當下變動中的顏色 idx
+
+  function init() {        
+    ctx = canvas.getContext('2d') 
+    if (!canvas.getContext) {
+      return
+    } 
+    canvas.width = win_w
+    canvas.height = win_h
+  }
+
+  init();
+
+  function color (defaultColor, colorChange) {    
+    /** 使用 rgb() 做顏色的變化
+     rgb 要像彩虹般由紅橙黃...到紫，的規則變化如下：
+     (255,0,0) => (255,255,0) => 
+     (0,255,0) => (0,255,255) => 
+     (0,0,255) => (255,0,255) => 
+     (255,0,0) 
+     用陣列將rgb顏色帶入，外層 colorIdx 記住目前改變的 id
+     step 1 : 將目前的下一個 id(nextIdx) 由 0 => 255
+     step 2 : 將目前 id 由 255 => 0
+     此為一個循環
+    */
+    let idx = colorIdx 
+    let len = defaultColor.length   
+    let nextIdx = idx === len - 1 ? 0 : idx + 1
+    
+    // 處理 nextId 0 => 255 的變化    
+    defaultColor[nextIdx] = defaultColor[nextIdx] >= 255 - colorChange 
+                            ? 255
+                            : defaultColor[nextIdx] + colorChange
+
+    // 處理 目前 id 255 => 0 的變化
+    if (defaultColor[nextIdx] === 255) {
+      if (defaultColor[idx] <= colorChange) {
+        defaultColor[idx] = 0        
+        
+        // 此為一個循環的結束，所以 colorIdx 要加 1 或回到初始的 0
+        colorIdx = colorIdx === len - 1 ? 0 : colorIdx + 1      
+      } else {
+        defaultColor[idx] -= colorChange
+      }
+    }    
+
+    return `rgb(${defaultColor[0]},${defaultColor[1]},${defaultColor[2]})`
+  }
+
+  canvas.addEventListener('mousemove', function(e) {
+    if (isDown) {      
+      console.log('down and move')            
+      let x = e.clientX
+      let y = e.clientY      
+      radius += radiusPlus   
+
+      if (radius >= bigest) {
+        radiusPlus = radiusPlus * -1
+      } else if (radius < 2) {
+        radiusPlus = radiusPlus * -1
+      }
+
+      let rgb = color(defaultColor, colorChange)
+      console.log(rgb)
+      ctx.beginPath()
+      ctx.arc(x, y, radius, 0, 2*Math.PI)
+      ctx.fillStyle = rgb
+      ctx.fill()
+    }
+  })
+
+  canvas.addEventListener('mousedown', function(e) {
+    isDown = true
+  })
+
+  canvas.addEventListener('click', function(e) {
+    isDown = false
+  })
 </script>
 
+<!-- mousedown 時，就會觸發事件。
+     click 則是滑鼠放開之後，才會觸發 -->
+
+<!--
+ctx.fillRect(25, 25, 100, 100)  // 畫出一個填滿的矩形
+ctx.clearRect(45, 45, 60, 60)   // 清除指定矩形區域的內容，使其變為全透明
+ctx.strokeRect(50, 50, 50, 50)  // 畫出一個矩形邊框
+
+ctx.beginPath()
+ctx.moveTo(175, 150)
+ctx.lineTo(200, 175)
+ctx.lineTo(200, 125)
+ctx.fill() // 呼叫 fill 時，任何開放式的圖形都會自動閉合，而 stroke 並非如此
+-->
 <style>
   html, body {
     margin:0;
+  }
+  #draw {
+    position: absolute;   
   }
 </style>
 

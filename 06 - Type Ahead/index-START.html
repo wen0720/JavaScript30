@@ -39,8 +39,8 @@
     let html = matchData.map(place => {      
     let matchCity = place.city.match(regex)
     let matchState = place.state.match(regex)                  
-    let cityName = place.city.replace(regex, `<span class="hl">${this.value ? matchCity : this.value}</span>`)      
-    let stateName = place.state.replace(regex, `<span class="hl">${this.value ? matchState: this.value}</span>`)      
+    let cityName = this.value ? place.city.replace(regex, `<span class="hl">${matchCity}</span>`) : place.city
+    let stateName = this.value ? place.state.replace(regex, `<span class="hl">${matchState}</span>`) : place.state
       return  `
         <li>
           <span class="name">${cityName}, ${stateName}</span>
